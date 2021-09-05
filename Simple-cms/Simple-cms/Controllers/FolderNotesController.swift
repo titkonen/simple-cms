@@ -5,7 +5,7 @@ class FolderNotesController: UITableViewController, UISearchBarDelegate {
     // MARK: PROPERTIES
     let searchController = UISearchController(searchResultsController: nil)
     
-    var folderData: NoteFolder! {
+    var folderData: ClientsCategory! {
         didSet {
             notes = CoreDataManager.shared.fetchNotes(from: folderData)
             filteredNotes = notes
@@ -21,7 +21,7 @@ class FolderNotesController: UITableViewController, UISearchBarDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationItem.title = "List of ideas"
+        self.navigationItem.title = "List of clients"
         
         setupTableView()
         setupSearchBar()

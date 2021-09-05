@@ -1,6 +1,6 @@
 import UIKit
 
-var noteFolders = [NoteFolder]() /// noteFolders is the instance reference to point at
+var noteFolders = [ClientsCategory]() /// noteFolders is the instance reference to point at
 
 class FoldersController: UITableViewController {
 
@@ -23,7 +23,7 @@ class FoldersController: UITableViewController {
         super.viewDidLoad()
         
         //view.backgroundColor = UIColor.init(rgb: 0x00FFFF)
-        navigationItem.title = "Ideas"
+        navigationItem.title = "Categories"
         
         noteFolders = CoreDataManager.shared.fetchNoteFolders() // Fetching data
         
@@ -56,7 +56,7 @@ class FoldersController: UITableViewController {
     
     // MARK: FUNCTIONS
     @objc fileprivate func handleAddNewFolder() {
-        let addAlert = UIAlertController(title: "New Idea Folder", message: "Enter a name for this idea folder.", preferredStyle: .alert)
+        let addAlert = UIAlertController(title: "New category", message: "Enter a name for this category.", preferredStyle: .alert)
         
         present(addAlert, animated: true)
         

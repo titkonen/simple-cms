@@ -2,7 +2,7 @@ import UIKit
 
 class FolderCell: UITableViewCell {
     
-    var folderData: NoteFolder! {
+    var folderData: ClientsCategory! {
         didSet {
             label.text = folderData.title
             let count = CoreDataManager.shared.fetchNotes(from: folderData).count

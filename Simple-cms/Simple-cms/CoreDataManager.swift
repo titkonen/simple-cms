@@ -6,7 +6,7 @@ struct CoreDataManager {
     static let shared = CoreDataManager()
     
     let persistentContainer: NSPersistentContainer = {
-        let container = NSPersistentContainer(name: "Ideas-Lunchbox")
+        let container = NSPersistentContainer(name: "Simple-cms")
         container.loadPersistentStores(completionHandler: { (storeDescription, err) in
             if let err = err {
                 fatalError("Loading of stores failed \(err)")
@@ -17,24 +17,24 @@ struct CoreDataManager {
     }()
     
     // MARK: Create Note folder
-    func createNoteFolder(title: String) -> NoteFolder { ///NoteFolder is a Coredata entity name
+    func createNoteFolder(title: String) -> ClientsCategory { ///ClientsCategory is a Core Data entity name
         let context = persistentContainer.viewContext
-        let newNoteFolder = NSEntityDescription.insertNewObject(forEntityName: "NoteFolder", into: context)
+        let newNoteFolder = NSEntityDescription.insertNewObject(forEntityName: "ClientsCategory", into: context)
         newNoteFolder.setValue(title, forKey: "title")
         
         do {
             try context.save()
-            return newNoteFolder as! NoteFolder
+            return newNoteFolder as! ClientsCategory
         } catch let err {
             print("Failed to save new note folder", err)
-          return newNoteFolder as! NoteFolder
+          return newNoteFolder as! ClientsCategory
         }
     }
     
     // MARK: Fetch noteFolders
-    func fetchNoteFolders() -> [NoteFolder] {
+    func fetchNoteFolders() -> [ClientsCategory] {
         let context = persistentContainer.viewContext
-        let fetchRequest = NSFetchRequest<NoteFolder>(entityName: "NoteFolder")
+        let fetchRequest = NSFetchRequest<ClientsCategory>(entityName: "ClientsCategory")
         
         do {
             let noteFolders = try context.fetch(fetchRequest)
@@ -46,7 +46,7 @@ struct CoreDataManager {
     }
     
     // MARK:  Delete note folders
-    func deleteNoteFolder(noteFolder: NoteFolder) -> Bool {
+    func deleteNoteFolder(noteFolder: ClientsCategory) -> Bool {
         let context = persistentContainer.viewContext
         context.delete(noteFolder)
         
@@ -61,7 +61,7 @@ struct CoreDataManager {
     
     // MARK: NOTE FUNCTIONS
     // MARK: Create New Note
-    func createNewNote(title: String, date: Date, text: String, noteFolder: NoteFolder) -> Note {
+    func createNewNote(title: String, date: Date, text: String, noteFolder: ClientsCategory) -> Note {
         let context = persistentContainer.viewContext
         let newNote = NSEntityDescription.insertNewObject(forEntityName: "Note", into: context) as! Note
         
@@ -69,7 +69,7 @@ struct CoreDataManager {
         newNote.title = title
         newNote.text = text
         newNote.date = date
-        newNote.noteFolder = noteFolder
+        newNote.clientsCategory = noteFolder
         
         do {
             try context.save()
@@ -81,7 +81,7 @@ struct CoreDataManager {
     }
     
     // MARK: Fetch Notes
-    func fetchNotes(from noteFolder: NoteFolder) -> [Note] {
+    func fetchNotes(from noteFolder: ClientsCategory) -> [Note] {
         guard let folderNotes = noteFolder.notes?.allObjects as? [Note] else {
             return []
         }

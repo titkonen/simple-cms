@@ -26,7 +26,7 @@ class NoteDetailController: UIViewController {
     fileprivate var textView: UITextView = {
         let textField = UITextView()
         textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.text = "Add your title in here"
+        textField.text = "Company name"
         textField.isEditable = true
         textField.textColor = .black
         textField.backgroundColor = UIColor.gray.withAlphaComponent(0.1)
@@ -41,7 +41,7 @@ class NoteDetailController: UIViewController {
     fileprivate var textView2: UITextView = {
         let textField = UITextView()
         textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.text = "Add your additional text here"
+        textField.text = "Contact name"
         textField.isEditable = true
         textField.textColor = .black
         textField.backgroundColor = UIColor.gray.withAlphaComponent(0.1)
