@@ -16,7 +16,7 @@ class NoteDetailController: UIViewController {
     var noteData: Note! {
         didSet {
             textView.text = noteData.title
-            textView2.text = noteData.text ///Preview
+            clientName.text = noteData.text ///Preview
             dateLabel.text = dateFormatter.string(from: noteData.date ?? Date())
         }
     }
@@ -38,7 +38,7 @@ class NoteDetailController: UIViewController {
         return textField
     }()
     
-    fileprivate var textView2: UITextView = {
+    fileprivate var clientName: UITextView = {
         let textField = UITextView()
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.text = "Contact name"
@@ -83,14 +83,14 @@ class NoteDetailController: UIViewController {
         super.viewWillDisappear(animated)
         
         if self.noteData == nil {
-            delegate?.saveNewNote(title: textView.text, date: Date(), text: textView2.text)
+            delegate?.saveNewNote(title: textView.text, date: Date(), text: clientName.text)
         } else {
             /// updates title text
             guard let newText = self.textView.text else {
                 return
             }
             /// Updates Description text
-            guard let newPreview = self.textView2.text else {
+            guard let newPreview = self.clientName.text else {
                 return
             }
             CoreDataManager.shared.saveUpdatedNote(note: self.noteData, newText: newText, newPreview: newPreview)
@@ -126,7 +126,7 @@ class NoteDetailController: UIViewController {
     fileprivate func setupUI() {
         view.addSubview(dateLabel)
         view.addSubview(textView)
-        view.addSubview(textView2)
+        view.addSubview(clientName)
         
         dateLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 90).isActive = true
         dateLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
@@ -135,12 +135,12 @@ class NoteDetailController: UIViewController {
         textView.topAnchor.constraint(equalTo: dateLabel.bottomAnchor, constant: 30).isActive = true
         textView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
         textView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
-        textView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -640).isActive = true
+        textView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -710).isActive = true
         
-        textView2.topAnchor.constraint(equalTo: view.topAnchor, constant: 280).isActive = true
-        textView2.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
-        textView2.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
-        textView2.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -140).isActive = true
+        clientName.topAnchor.constraint(equalTo: view.topAnchor, constant: 200).isActive = true
+        clientName.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
+        clientName.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
+        clientName.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -650).isActive = true
                 
         
     }
