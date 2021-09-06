@@ -1,7 +1,15 @@
 import UIKit
 
 protocol NoteDelegate {
-    func saveNewNote(title: String, date: Date, text: String)
+    func saveNewNote(
+        title: String,
+        date: Date,
+        text: String,
+        jobtitle: String,
+        email: String,
+        phoneNumber: String,
+        status: String
+    )
 }
 
 class NoteDetailController: UIViewController {
@@ -15,9 +23,14 @@ class NoteDetailController: UIViewController {
     
     var noteData: Note! {
         didSet {
+            dateLabel.text = dateFormatter.string(from: noteData.date ?? Date())
             textView.text = noteData.title
             clientName.text = noteData.text ///Preview
-            dateLabel.text = dateFormatter.string(from: noteData.date ?? Date())
+            jobtitle.text = noteData.jobtitle
+            email.text = noteData.email
+            phoneNumber.text = noteData.phoneNumber
+            status.text = noteData.status
+            
         }
     }
     
@@ -62,6 +75,61 @@ class NoteDetailController: UIViewController {
         return label
     }()
     
+    fileprivate var jobtitle: UITextView = {
+        let textField = UITextView()
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.text = "Jobtitle"
+        textField.isEditable = true
+        textField.textColor = .black
+        textField.backgroundColor = UIColor.gray.withAlphaComponent(0.1)
+        textField.isSelectable = true
+        textField.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        textField.clipsToBounds = true
+        textField.layer.cornerRadius = 8
+        return textField
+    }()
+    
+    fileprivate var email: UITextView = {
+        let textField = UITextView()
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.text = "Email address"
+        textField.isEditable = true
+        textField.textColor = .black
+        textField.backgroundColor = UIColor.gray.withAlphaComponent(0.1)
+        textField.isSelectable = true
+        textField.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        textField.clipsToBounds = true
+        textField.layer.cornerRadius = 8
+        return textField
+    }()
+    
+    fileprivate var phoneNumber: UITextView = {
+        let textField = UITextView()
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.text = "Phone number"
+        textField.isEditable = true
+        textField.textColor = .black
+        textField.backgroundColor = UIColor.gray.withAlphaComponent(0.1)
+        textField.isSelectable = true
+        textField.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        textField.clipsToBounds = true
+        textField.layer.cornerRadius = 8
+        return textField
+    }()
+    
+    fileprivate var status: UITextView = {
+        let textField = UITextView()
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.text = "Status of client contact"
+        textField.isEditable = true
+        textField.textColor = .black
+        textField.backgroundColor = UIColor.gray.withAlphaComponent(0.1)
+        textField.isSelectable = true
+        textField.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        textField.clipsToBounds = true
+        textField.layer.cornerRadius = 8
+        return textField
+    }()
     
     // MARK: LIFE CYCLE
     override func viewDidLoad() {
@@ -69,21 +137,21 @@ class NoteDetailController: UIViewController {
         
         view.backgroundColor = .white
         setupUI()
-        
-//        func textViewDidBeginEditing(_ textView: UITextView) {
-//            if textView.textColor == UIColor.lightGray {
-//                textView.text = nil
-//                textView.textColor = UIColor.black
-//            }
-//        }
-
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
         if self.noteData == nil {
-            delegate?.saveNewNote(title: textView.text, date: Date(), text: clientName.text)
+            delegate?.saveNewNote(
+                title: textView.text,
+                date: Date(),
+                text: clientName.text,
+                jobtitle: jobtitle.text,
+                email: email.text,
+                phoneNumber: phoneNumber.text,
+                status: status.text
+            )
         } else {
             /// updates title text
             guard let newText = self.textView.text else {
@@ -93,7 +161,36 @@ class NoteDetailController: UIViewController {
             guard let newPreview = self.clientName.text else {
                 return
             }
-            CoreDataManager.shared.saveUpdatedNote(note: self.noteData, newText: newText, newPreview: newPreview)
+            
+            /// Updates Jobtitle text
+            guard let newJobtitle = self.jobtitle.text else {
+                return
+            }
+
+            /// Updates email text
+            guard let newEmail = self.email.text else {
+                return
+            }
+            
+            /// Updates phoneNumber text
+            guard let newPhoneNumber = self.phoneNumber.text else {
+                return
+            }
+            
+            /// Updates phoneNumber text
+            guard let newStatus = self.status.text else {
+                return
+            }
+            
+            CoreDataManager.shared.saveUpdatedNote(
+                note: self.noteData,
+                newText: newText,
+                newPreview: newPreview,
+                newJobtitle: newJobtitle,
+                newEmail: newEmail,
+                newPhoneNumber: newPhoneNumber,
+                newStatus: newStatus
+            )
         }
     }
     
@@ -127,22 +224,45 @@ class NoteDetailController: UIViewController {
         view.addSubview(dateLabel)
         view.addSubview(textView)
         view.addSubview(clientName)
+        view.addSubview(jobtitle)
+        view.addSubview(email)
+        view.addSubview(phoneNumber)
+        view.addSubview(status)
         
         dateLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 90).isActive = true
         dateLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
-        dateLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
+        dateLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0).isActive = true
         
-        textView.topAnchor.constraint(equalTo: dateLabel.bottomAnchor, constant: 30).isActive = true
+        textView.topAnchor.constraint(equalTo: dateLabel.bottomAnchor, constant: 20).isActive = true
         textView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
         textView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
-        textView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -710).isActive = true
+        textView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -720).isActive = true
         
         clientName.topAnchor.constraint(equalTo: view.topAnchor, constant: 200).isActive = true
         clientName.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
         clientName.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
-        clientName.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -650).isActive = true
-                
-        
+        clientName.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -660).isActive = true
+    
+        jobtitle.topAnchor.constraint(equalTo: view.topAnchor, constant: 250).isActive = true
+        jobtitle.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
+        jobtitle.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
+        jobtitle.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -610).isActive = true
+  
+        email.topAnchor.constraint(equalTo: view.topAnchor, constant: 300).isActive = true
+        email.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
+        email.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
+        email.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -560).isActive = true
+  
+        phoneNumber.topAnchor.constraint(equalTo: view.topAnchor, constant: 350).isActive = true
+        phoneNumber.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
+        phoneNumber.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
+        phoneNumber.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -510).isActive = true
+  
+        status.topAnchor.constraint(equalTo: view.topAnchor, constant: 420).isActive = true
+        status.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
+        status.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
+        status.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -310).isActive = true
+  
     }
     
     /// Text field testing

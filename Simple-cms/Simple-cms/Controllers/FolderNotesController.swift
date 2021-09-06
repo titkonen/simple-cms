@@ -48,7 +48,6 @@ class FolderNotesController: UITableViewController, UISearchBarDelegate {
         self.definesPresentationContext = true
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = true /// true
-        //searchController.dimsBackgroundDuringPresentation = false
         searchController.searchBar.delegate = self ///as! UISearchBarDelegate
     }
     
@@ -137,8 +136,24 @@ extension FolderNotesController {
 
 // MARK: EXTENSION NoteDelegate
 extension FolderNotesController: NoteDelegate {
-    func saveNewNote(title: String, date: Date, text: String) {
-        let newNote = CoreDataManager.shared.createNewNote(title: title, date: date, text: text, noteFolder: self.folderData) ///Creates new note to the list and coredata
+    func saveNewNote(
+        title: String,
+        date: Date,
+        text: String,
+        jobtitle: String,
+        email: String,
+        phoneNumber: String,
+        status: String
+        ) {
+        let newNote = CoreDataManager.shared.createNewNote(
+            title: title,
+            date: date,
+            text: text,
+            jobtitle: jobtitle,
+            email: email,
+            phoneNumber: phoneNumber,
+            status: status,
+            noteFolder: self.folderData) ///Creates new note to the list and coredata
         notes.append(newNote)
         filteredNotes.append(newNote)
         self.tableView.insertRows(at: [IndexPath(row: notes.count - 1, section: 0)], with: .fade)

@@ -59,9 +59,17 @@ struct CoreDataManager {
         }
     }
     
-    // MARK: NOTE FUNCTIONS
+    // MARK: SINGLE NOTE FUNCTIONS
     // MARK: Create New Note
-    func createNewNote(title: String, date: Date, text: String, noteFolder: ClientsCategory) -> Note {
+    func createNewNote(
+        title: String,
+        date: Date,
+        text: String,
+        jobtitle: String,
+        email: String,
+        phoneNumber: String,
+        status: String,
+        noteFolder: ClientsCategory) -> Note {
         let context = persistentContainer.viewContext
         let newNote = NSEntityDescription.insertNewObject(forEntityName: "Note", into: context) as! Note
         
@@ -70,6 +78,10 @@ struct CoreDataManager {
         newNote.text = text
         newNote.date = date
         newNote.clientsCategory = noteFolder
+        newNote.jobtitle = jobtitle
+        newNote.email = email
+        newNote.phoneNumber = phoneNumber
+        newNote.status = status
         
         do {
             try context.save()
@@ -103,12 +115,24 @@ struct CoreDataManager {
     }
     
     // MARK:  Update notes
-    func saveUpdatedNote(note: Note, newText: String, newPreview: String) {
+    func saveUpdatedNote(
+        note: Note,
+        newText: String,
+        newPreview: String,
+        newJobtitle: String,
+        newEmail: String,
+        newPhoneNumber: String,
+        newStatus: String
+    ) {
         let context = persistentContainer.viewContext
         
         note.title = newText
         note.text = newPreview
         note.date = Date()
+        note.jobtitle = newJobtitle
+        note.email = newEmail
+        note.phoneNumber = newPhoneNumber
+        note.status = newStatus
         
         do {
             try context.save()
